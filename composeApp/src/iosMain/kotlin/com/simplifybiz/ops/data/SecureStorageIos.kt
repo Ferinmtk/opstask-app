@@ -1,21 +1,32 @@
 package com.simplifybiz.ops.data
 
-import com.russhwolf.settings.KeychainSettings
+import com.russhwolf.settings.NSUserDefaultsSettings
+import platform.Foundation.NSUserDefaults
 
+/**
+ * iOS SecureStorage backed by a dedicated NSUserDefaults suite.
+ *
+ * Note: this is NOT Keychain-encrypted. The Keychain (KeychainSettings) throws
+ * errSecMissingEntitlement (-34018) on unsigned simulator builds like the ones
+ * run on Appetize. NSUserDefaults needs no entitlements and runs everywhere.
+ * For a signed production build you can switch this back to KeychainSettings.
+ */
 class SecureStorageIos(
-    service: String = "com.simplifybiz.ops.secure"
+    suiteName: String = "com.simplifybiz.ops.secure"
 ) : SecureStorage {
 
-    private val keychain = KeychainSettings(service = service)
+    private val settings = NSUserDefaultsSettings(
+        NSUserDefaults(suiteName = suiteName)
+    )
 
     override fun put(key: String, value: String) {
-        keychain.putString(key, value)
+        settings.putString(key, value)
     }
 
     override fun get(key: String): String? =
-        keychain.getStringOrNull(key)
+        settings.getStringOrNull(key)
 
     override fun remove(key: String) {
-        keychain.remove(key)
+        settings.remove(key)
     }
 }
