@@ -6,7 +6,7 @@ workflows:
     environment:
       # Kotlin 2.1.0 supports Xcode up to ~16.2; newer Xcode breaks the
       # Kotlin/Native platform.* (Security/Foundation) cinterop bindings.
-      xcode: 16.2
+      xcode: latest
       java: 21
     scripts:
       - name: Set up local.properties
