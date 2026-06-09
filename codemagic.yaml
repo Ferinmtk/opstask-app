@@ -1,0 +1,47 @@
+workflows:
+  ios-debug-build:
+    name: iOS Debug Build (Unsigned)
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      xcode: latest
+      java: 21
+    scripts:
+      - name: Set up local.properties
+        script: |
+          # The Compose Multiplatform iOS build still evaluates the Android
+          # module during configuration, so Gradle needs the Android SDK path.
+          # This app reads no other secrets at build time (the API base URL is
+          # compiled in via ApiConstants), so nothing else is required here.
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+      - name: Make gradlew executable
+        script: |
+          chmod +x ./gradlew
+      - name: Build iOS app (unsigned, for simulator)
+        script: |
+          set -eox pipefail
+          cd iosApp
+          xcodebuild \
+            -project iosApp.xcodeproj \
+            -scheme iosApp \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            build 2>&1 | tee ../xcodebuild.log
+      - name: Package app for Appetize
+        script: |
+          set -eox pipefail
+          APP_PATH=$(find iosApp/build/Build/Products/Debug-iphonesimulator -name "*.app" -maxdepth 1 | head -1)
+          echo "Found app at: $APP_PATH"
+          # Verify the bundle is well-formed
+          ls "$APP_PATH/Info.plist"
+          # Appetize needs the .app at the root of the zip
+          cd "$(dirname "$APP_PATH")"
+          zip -r ~/SimplifyOps.app.zip "$(basename "$APP_PATH")"
+          echo "Packaged successfully"
+    artifacts:
+      - ~/SimplifyOps.app.zip
+      - iosApp/build/Build/Products/Debug-iphonesimulator/*.app
+      - xcodebuild.log

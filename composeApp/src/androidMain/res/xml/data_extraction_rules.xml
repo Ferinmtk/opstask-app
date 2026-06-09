@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Configures what is and isn't included in device backups + cloud backups.
+    For maximum safety we exclude everything: the app stores no user-generated
+    content worth backing up (just an auth token and cached task list, both
+    re-fetchable on next login).
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="root" />
+        <exclude domain="sharedpref" />
+        <exclude domain="database" />
+        <exclude domain="file" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="root" />
+        <exclude domain="sharedpref" />
+        <exclude domain="database" />
+        <exclude domain="file" />
+    </device-transfer>
+</data-extraction-rules>
