@@ -4,7 +4,9 @@ workflows:
     max_build_duration: 60
     instance_type: mac_mini_m2
     environment:
-      xcode: latest
+      # Kotlin 2.1.0 supports Xcode up to ~16.2; newer Xcode breaks the
+      # Kotlin/Native platform.* (Security/Foundation) cinterop bindings.
+      xcode: 16.2
       java: 21
     scripts:
       - name: Set up local.properties
