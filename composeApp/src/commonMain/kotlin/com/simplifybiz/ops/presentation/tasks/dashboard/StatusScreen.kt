@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -22,7 +21,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -36,6 +34,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.simplifybiz.ops.presentation.AppNavigator
+import com.simplifybiz.ops.presentation.components.BackIcon
+import com.simplifybiz.ops.presentation.components.OpsTopBar
 import com.simplifybiz.ops.presentation.Route
 import com.simplifybiz.ops.presentation.components.BottomNavBar
 import com.simplifybiz.ops.presentation.components.GlassCard
@@ -68,11 +68,11 @@ fun StatusScreen(navigator: AppNavigator) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            OpsTopBar(
                 title = { Text("Status") },
                 navigationIcon = {
                     IconButton(onClick = { navigator.goto(Route.TasksHome) }) {
-                        Icon(Icons.Outlined.ArrowBack, contentDescription = "Back")
+                        BackIcon()
                     }
                 }
             )

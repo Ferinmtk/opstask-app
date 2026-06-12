@@ -31,7 +31,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -49,6 +48,8 @@ import androidx.compose.ui.unit.dp
 import com.simplifybiz.ops.data.SessionManager
 import com.simplifybiz.ops.data.tasks.CachedTask
 import com.simplifybiz.ops.presentation.AppNavigator
+import com.simplifybiz.ops.presentation.components.BackIcon
+import com.simplifybiz.ops.presentation.components.OpsTopBar
 import com.simplifybiz.ops.presentation.Route
 import com.simplifybiz.ops.presentation.components.BottomNavBar
 import com.simplifybiz.ops.presentation.components.GlassCard
@@ -88,7 +89,7 @@ fun TasksHomeScreen(navigator: AppNavigator) {
 
     Scaffold(
         topBar = {
-            TopAppBar(title = {
+            OpsTopBar(title = {
                 Column {
                     Text("Tasks", style = MaterialTheme.typography.titleMedium)
                     val subtitle = ApiConstants.OPS_BASE_URL

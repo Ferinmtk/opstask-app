@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -27,7 +26,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -39,6 +37,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.simplifybiz.ops.data.tasks.CachedTask
 import com.simplifybiz.ops.presentation.AppNavigator
+import com.simplifybiz.ops.presentation.components.BackIcon
+import com.simplifybiz.ops.presentation.components.OpsTopBar
 import com.simplifybiz.ops.presentation.Route
 import com.simplifybiz.ops.presentation.components.BottomNavBar
 import com.simplifybiz.ops.presentation.tasks.TasksListViewModel
@@ -58,7 +58,7 @@ fun InboxScreen(navigator: AppNavigator) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            OpsTopBar(
                 title = {
                     Column {
                         Text("Inbox", style = MaterialTheme.typography.titleMedium)
@@ -71,7 +71,7 @@ fun InboxScreen(navigator: AppNavigator) {
                 },
                 navigationIcon = {
                     IconButton(onClick = { navigator.goto(Route.TasksHome) }) {
-                        Icon(Icons.Outlined.ArrowBack, contentDescription = "Back")
+                        BackIcon()
                     }
                 }
             )

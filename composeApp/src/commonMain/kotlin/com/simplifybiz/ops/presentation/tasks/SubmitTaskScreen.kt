@@ -14,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -32,7 +31,6 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,6 +44,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.simplifybiz.ops.data.tasks.Priorities
 import com.simplifybiz.ops.presentation.AppNavigator
+import com.simplifybiz.ops.presentation.components.BackIcon
+import com.simplifybiz.ops.presentation.components.OpsTopBar
+import com.simplifybiz.ops.presentation.components.SegmentedControl
+import com.simplifybiz.ops.presentation.components.WheelDatePickerSheet
+import com.simplifybiz.ops.util.isIosPlatform
 import com.simplifybiz.ops.presentation.Route
 import com.simplifybiz.ops.presentation.theme.OpsBrand
 import com.simplifybiz.ops.util.formatDateForDisplay
@@ -66,11 +69,11 @@ fun SubmitTaskScreen(navigator: AppNavigator) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            OpsTopBar(
                 title = { Text("New Task") },
                 navigationIcon = {
                     IconButton(onClick = { navigator.goto(Route.TasksHome) }) {
-                        Icon(Icons.Outlined.ArrowBack, contentDescription = "Back")
+                        BackIcon()
                     }
                 }
             )
@@ -127,7 +130,19 @@ fun SubmitTaskScreen(navigator: AppNavigator) {
 
             Text("Priority", style = MaterialTheme.typography.titleSmall)
             Spacer(Modifier.height(4.dp))
-            PriorityRow(state.priority, viewModel::setPriority)
+            if (isIosPlatform) {
+                SegmentedControl(
+                    options = listOf(
+                        "Low" to Priorities.LOW,
+                        "Normal" to Priorities.NORMAL,
+                        "High" to Priorities.HIGH
+                    ),
+                    selected = state.priority,
+                    onSelect = viewModel::setPriority
+                )
+            } else {
+                PriorityRow(state.priority, viewModel::setPriority)
+            }
             Spacer(Modifier.height(14.dp))
 
             Column(modifier = Modifier.fillMaxWidth()) {
@@ -199,7 +214,17 @@ fun SubmitTaskScreen(navigator: AppNavigator) {
         }
     }
 
-    if (showDatePicker) {
+    if (showDatePicker && isIosPlatform) {
+        WheelDatePickerSheet(
+            onDismiss = { showDatePicker = false },
+            onConfirm = { date ->
+                viewModel.setDateDue(date.toApiDateString())
+                showDatePicker = false
+            }
+        )
+    }
+
+    if (showDatePicker && !isIosPlatform) {
         val pickerState = rememberDatePickerState()
         DatePickerDialog(
             onDismissRequest = { showDatePicker = false },

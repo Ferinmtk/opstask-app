@@ -22,7 +22,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -33,7 +32,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -53,6 +51,8 @@ import com.simplifybiz.ops.data.cache.SyncState
 import com.simplifybiz.ops.data.tasks.CachedTask
 import com.simplifybiz.ops.data.tasks.TaskStages
 import com.simplifybiz.ops.presentation.AppNavigator
+import com.simplifybiz.ops.presentation.components.BackIcon
+import com.simplifybiz.ops.presentation.components.OpsTopBar
 import com.simplifybiz.ops.presentation.Route
 import com.simplifybiz.ops.presentation.components.BottomNavBar
 import com.simplifybiz.ops.presentation.components.GlassCard
@@ -84,7 +84,7 @@ fun ViewTasksScreen(navigator: AppNavigator) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            OpsTopBar(
                 title = {
                     Column {
                         Text("View tasks", style = MaterialTheme.typography.titleMedium)
@@ -97,7 +97,7 @@ fun ViewTasksScreen(navigator: AppNavigator) {
                 },
                 navigationIcon = {
                     IconButton(onClick = { navigator.goto(Route.TasksHome) }) {
-                        Icon(Icons.Outlined.ArrowBack, contentDescription = "Back")
+                        BackIcon()
                     }
                 },
                 actions = {

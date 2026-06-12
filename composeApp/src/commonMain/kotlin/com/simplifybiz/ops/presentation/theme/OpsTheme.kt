@@ -1,15 +1,22 @@
 package com.simplifybiz.ops.presentation.theme
 
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import com.simplifybiz.ops.util.isIosPlatform
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 /**
@@ -145,6 +152,16 @@ private val OpsTypography = Typography(
     labelSmall    = TextStyle(fontSize = 11.sp, fontWeight = FontWeight.Medium, letterSpacing = 0.3.sp)
 )
 
+// iOS rounding: continuous-feeling, larger radii than Material defaults
+private val IosShapes = Shapes(
+    extraSmall = RoundedCornerShape(6.dp),
+    small      = RoundedCornerShape(10.dp),
+    medium     = RoundedCornerShape(14.dp),
+    large      = RoundedCornerShape(18.dp),
+    extraLarge = RoundedCornerShape(24.dp)
+)
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OpsTheme(content: @Composable () -> Unit) {
     // Always use the light (white) scheme. The app is a bright, document-style
@@ -153,6 +170,14 @@ fun OpsTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = LightColors,
         typography = OpsTypography,
-        content = content
-    )
+        shapes = if (isIosPlatform) IosShapes else Shapes()
+    ) {
+        if (isIosPlatform) {
+            // iOS has no ripple: providing null disables Material ripples
+            // app-wide on iOS; Android keeps its normal ripple.
+            CompositionLocalProvider(LocalRippleConfiguration provides null, content = content)
+        } else {
+            content()
+        }
+    }
 }

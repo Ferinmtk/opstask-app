@@ -27,7 +27,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -41,6 +40,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.simplifybiz.ops.data.messages.Message
 import com.simplifybiz.ops.presentation.AppNavigator
+import com.simplifybiz.ops.presentation.components.BackIcon
+import com.simplifybiz.ops.presentation.components.OpsTopBar
 import com.simplifybiz.ops.presentation.Route
 import com.simplifybiz.ops.presentation.components.BottomNavBar
 import com.simplifybiz.ops.util.formatDateTimeForDisplay
@@ -65,7 +66,7 @@ fun MessagesScreen(navigator: AppNavigator) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            OpsTopBar(
                 title = { Text("Messages") },
                 actions = {
                     IconButton(onClick = { viewModel.refresh() }) {
